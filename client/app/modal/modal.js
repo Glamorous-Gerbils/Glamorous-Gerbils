@@ -17,19 +17,52 @@ nomNow.controller("modalctrl", ["$scope","$modal","Map",function ($scope,$modal,
 }])
 
 .controller('ModalInstanceCtrl',["$scope","$modalInstance",'Map',"$http",function ($scope, $modalInstance, Map, $http){
+  $scope.manual = {'visibility' :"collapse"}
+  $scope.buttons = {'visibility' :"collapse"}
   // loading exists till it finds the closest 
   $scope.items="Loading..."
   $scope.waittime={};
   var restaurant;
-  Map.getClosestRestaurant(function(value){
-    console.log(value)
-    restaurant=value;
-    $scope.items = "Closest restaurant "+value['name'];
-    $scope.$digest()
-  })
+
+  var getclose = function(){
+    Map.getClosestRestaurant(function(value){
+      console.log(value)
+      restaurant=value;
+
+      $scope.items = "Are you  at : "+value['name']+"?";
+      $scope.buttons = {'visibility' :"visible"}
+      $scope.$digest()
+    }) 
+  }
+
+  getclose()
+
   $scope.waittime.inputs ='30'
-  // on ok the function makes a "POST" request to the server.
-  $scope.ok=function(){
+  $scope.yes=function(){
+    $scope.items= restaurant['name']
+    $scope.buttons = {'visibility' :"collapse", "height":"0px","width":"0px"};
+  }
+
+  $scope.no=function(){
+    $scope.buttons =  {'visibility' :"collapse", "height":"0px","width":"0px"};
+    $scope.manual = {'visibility' :"visible"}
+    $scope.items="Enter the place you are at."
+  }
+
+  $scope.cancel=function(){
+    $modalInstance.close()
+  }
+
+  $scope.ok =function(){
+   var n = $scope.manualinput
+    Map.getClosestRestaurant(function(value){
+      $scope.items = "Are you  at : "+value['name']+"?";
+      $scope.buttons = {'visibility' :"visible"}
+      $scope.$digest()
+    },n);      
+  }
+
+  $scope.submit= function(){
     var info= {data:{google_id:restaurant.google_id,
       name:restaurant.name,
       longitude: restaurant.location["D"],
@@ -40,12 +73,9 @@ nomNow.controller("modalctrl", ["$scope","$modal","Map",function ($scope,$modal,
       method: 'POST',
       url: '/wait',
       data: info
+      
     })
-    $modalInstance.close()
-  }
-  // no does not do anyting. just cuts off any actions.
-  $scope.no=function(){
-    $modalInstance.close()
+    $modalInstance.close();
   }
 
 }])
