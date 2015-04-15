@@ -14,14 +14,23 @@
    <div class="modal-body" >
       <div class = 'custombody'>
        <p>{{items}}</p><br>
+          <div ng-style='buttons'>
+            <button ng-click="yes()" class= 'btn btn-primary btn active'>Yes</button>
+            <button ng-click= "no()" class ='btn btn-primary btn active'>No</button>
+          </div>
+          <div ng-style = "manual">
+            <input ng-model = "manualinput" type="text/html">
+            <button ng-click="ok()" class = 'btn btn-primary btn active'>ok</button>
+          </div>
+        <br><br>
        <span class= "waittext">{{waittime.inputs}} minutes</span>
        <p>Enter your wait time: <input  ng-model = "waittime.inputs"  type="range" min="0" max="60" value="30" step="5"></p>
       </div>
    </div>
    <div class="modal-footer">
       <div class ="customfoot">
-        <button ng-click="ok()" class= 'btn btn-primary btn-lg active'>OK</button>
-        <button ng-click= "no()" class ='btn btn-primary btn-lg active'>Cancel</button>
+         <button ng-click= "submit()" class ='btn btn-primary btn active'>Submit</button>
+         <button ng-click= "cancel()" class ='btn btn-primary btn active'>cancel</button>
       </div>
    </div>
   </script>

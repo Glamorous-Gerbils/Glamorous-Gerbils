@@ -104,7 +104,7 @@ angular.module('nomNow.services', [])
   }
 ////////////  Modal needed function to pass on restaurant data
 
-  var getClosestRestaurant = function (cb){
+  var getClosestRestaurant = function (cb,byname){
     // temp vars to find closest restaurant
     var mylat = null;
     var mylong = null;
@@ -116,16 +116,24 @@ angular.module('nomNow.services', [])
     getPosition().then(function(value){
       mylat = value.coords.latitude
       mylong = value.coords.longitude
-      var pyrmont = new google.maps.LatLng(mylat, mylong)
+      var myloc = new google.maps.LatLng(mylat, mylong)
       var request = {
-          location: pyrmont,
+          location: myloc,
           radius: 500,
           types: ['restaurant']
         };
+      if(byname){
+        var request = {
+            location: myloc,
+            radius: 1500,
+            name:byname
+          };
+        }
       // api request that gets closest places.
       var service = new google.maps.places.PlacesService(map);
       service.nearbySearch(request, function(value){
         //looping the result to find closet restaurant
+          
           for(var x =0 ; x<value.length; x++){
             var coords = value[x]['geometry']['location'];
             var place = value[x]['name']
