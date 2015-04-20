@@ -5,6 +5,7 @@ USE nomNow;
 CREATE TABLE restaurants (
   google_id varchar NOT NULL,
   name varchar NOT NULL,
+  website varchar(255) NOT NULL DEFAULT 'undefined',
   longitude double precision NOT NULL,
   latitude double precision NOT NULL,
   PRIMARY KEY(google_id)

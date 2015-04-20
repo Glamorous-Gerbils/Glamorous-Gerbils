@@ -35,8 +35,8 @@ app.post('/wait', function (req, res) {
   }
 
   else {
-    db.addReport(data.google_id, data.wait, data.name, data.longitude, data.latitude);
-    db.addRestaurant(data.name, data.google_id, data.longitude, data.latitude);
+    db.addReport(data.google_id, data.wait, data.name, data.website, data.longitude, data.latitude);
+    db.addRestaurant(data.name, data.website, data.google_id, data.longitude, data.latitude);
     res.sendStatus(200);
   }
 });

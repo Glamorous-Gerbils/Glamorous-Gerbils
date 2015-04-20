@@ -36,7 +36,7 @@ exports.init = function(){
     connection.release();
   });
 
-  var createTblRestaurants = 'CREATE TABLE IF NOT EXISTS restaurants (google_id varchar(255) NOT NULL,name varchar(255) NOT NULL,longitude double precision NOT NULL,latitude double precision NOT NULL,PRIMARY KEY(google_id));';
+  var createTblRestaurants = "CREATE TABLE IF NOT EXISTS restaurants (google_id varchar(255) NOT NULL,name varchar(255) NOT NULL, website varchar(255) NOT NULL DEFAULT 'undefined', longitude double precision NOT NULL,latitude double precision NOT NULL,PRIMARY KEY(google_id));";
   pool.getConnection(function(err,connection){
     connection.on('error', function(err) {
       console.log(err.code); 
@@ -87,7 +87,7 @@ exports.getLatestAvgWaitAtLocation = function(locationID, cb){
 };
 
 exports.getAvgWaitsLatestReportAllLocs = function(cb){
-  var complicatedQuery = 'SELECT restaurants.google_id, restaurants.name, restaurants.longitude, restaurants.latitude, ROUND(AVG(reports.wait_time)/5,0)*5 AS avg_wait, (SELECT reports.created_at FROM reports WHERE reports.google_id = restaurants.google_id ORDER BY reports.created_at DESC LIMIT 1) AS most_recent FROM restaurants INNER JOIN reports ON restaurants.google_id = reports.google_id GROUP BY restaurants.google_id;';
+  var complicatedQuery = 'SELECT restaurants.google_id, restaurants.name, restaurants.website, restaurants.longitude, restaurants.latitude, ROUND(AVG(reports.wait_time)/5,0)*5 AS avg_wait, (SELECT reports.created_at FROM reports WHERE reports.google_id = restaurants.google_id ORDER BY reports.created_at DESC LIMIT 1) AS most_recent FROM restaurants INNER JOIN reports ON restaurants.google_id = reports.google_id GROUP BY restaurants.google_id;';
   pool.getConnection(function(err,connection){
     connection.on('error', function(err) {
       console.log(err.code); 
@@ -106,7 +106,7 @@ exports.getAvgWaitsLatestReportAllLocs = function(cb){
 };
 
 exports.getAllRestaurants = function(cb){
-  var getAllQuery = 'SELECT restaurants.google_id, restaurants.name, reports.wait_time, reports.created_at FROM restaurants INNER JOIN reports ON restaurants.google_id = reports.google_id;';
+  var getAllQuery = 'SELECT restaurants.google_id, restaurants.name, restaurants.website, reports.wait_time, reports.created_at FROM restaurants INNER JOIN reports ON restaurants.google_id = reports.google_id;';
   pool.getConnection(function(err,connection){
     connection.on('error', function(err) {
       console.log(err.code); 
@@ -141,13 +141,13 @@ exports.isRestaurantInDB = function(locationID){
   });
 };
 
-exports.addReport = function(locationID,waitTime,name,lon,lat){
+exports.addReport = function(locationID,waitTime,name,website,lon,lat){
   var reportQuery = 'INSERT INTO reports (google_id, wait_time) VALUES (?,?);';
   var params = [locationID,waitTime];
   if(exports.isRestaurantInDB(locationID)){
     // NO OP
   }else{
-    exports.addRestaurant(name,locationID,lon,lat);
+    exports.addRestaurant(name,website,locationID,lon,lat);
   }
   pool.getConnection(function(err,connection){
     connection.on('error', function(err) {
@@ -162,10 +162,10 @@ exports.addReport = function(locationID,waitTime,name,lon,lat){
   });
 };
 
-exports.addRestaurant = function(name,g_id,lon,lat){
+exports.addRestaurant = function(name,website,g_id,lon,lat){
   // ignore duplicates or error
-  var addQuery = 'INSERT IGNORE INTO restaurants (name,google_id,longitude,latitude) VALUES (?,?,?,?);';
-  var params = [name,g_id,lon,lat];
+  var addQuery = 'INSERT IGNORE INTO restaurants (name,website,google_id,longitude,latitude) VALUES (?,?,?,?,?);';
+  var params = [name,website,g_id,lon,lat];
   pool.getConnection(function(err,connection){
     connection.on('error', function(err) {
       console.log(err.code); 
