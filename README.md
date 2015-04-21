@@ -45,7 +45,7 @@ Angular is taking care of the routes. When someone tries to report a wait, the c
 ### Modal
 We used the `angular-bootstrap` library to create the modal.
 
-### Googele Maps API + Google Places
+### Google Maps API + Google Places
 We used the Google Maps API to generate the map and the markers, and we used the Google Places libary to get the info about the places.
 
 # 3. Ideas for Improvement/Extension
