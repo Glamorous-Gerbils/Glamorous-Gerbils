@@ -43,3 +43,38 @@ app.post('/wait', function (req, res) {
   }
 });
 
+app.post('/newtime', function(req, res) {
+  var phoneNumber = req.body.phoneNumber;
+  var wait = req.body.wait; //do some parsing to remove text, etc.
+
+  //select google_id from restaurants where restaurants.phoneNumber = phoneNumber
+
+  //insert wait into reports where google_id = 
+  //insert sql query into our database
+  db.addReport(foundGoogleID, wait);
+
+})
+
+// To post data, use this format in the post request:
+
+// {"data":   {
+//         "google_id": "ChIJ1XlZ4Qm1RIYR4rpevy6Ybs4",
+//         "name": "Roaring Fork",
+//         "website": "http://roaringfork.com",
+//         "longitude": -97.74213199999997,
+//         "latitude": 30.269059,
+//         "wait": 15
+// }}
+
+var tropo_webapi = require('tropo-webapi');
+
+app.get('/testing', function(req, res) {
+  // var phoneNumber = '+19563939777'
+  // var tropo = new TropoWebAPI()
+  // tropo.call(phoneNumber)
+  // tropo.say('This is only a test.')
+  // res.end(TropoJSON(tropo))
+  console.log(req)
+
+
+})

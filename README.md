@@ -1,5 +1,19 @@
-# NomNow
+# NomNow 2.0
 *Skip lines, not lunch*
+
+Contributors
+------------
+
+Adam Guerra [Adam's Github profile] (https://github.com/adamlg)
+
+Karen Lewis [Karen's Github profile](https://github.com/karmakettle)
+
+Josh Benson [Josh's Github profile](https://github.com/joshuabenson)
+
+Stephanie Foskitt [Stephanie's Github profile](https://github.com/SFoskitt)
+
+NomNow 1.0 information:
+----------------------
 
 [View the deployed app](http://nomnow.herokuapp.com)
 
