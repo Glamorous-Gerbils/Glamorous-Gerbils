@@ -42,4 +42,3 @@ app.post('/wait', function (req, res) {
     res.sendStatus(200);
   }
 });
-
