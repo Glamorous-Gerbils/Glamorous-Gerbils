@@ -28,7 +28,20 @@ angular.module('nomNow.services', [])
       mapOptions.center = latLong;
       map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
       that.createMarker(map, latLong, "You are here");
+      return map;
     });
+  }
+
+  //reposition map
+  var centerMap = function(place){
+    // var place = scope.gPlace.getPlace();
+      if (place.geometry) {
+        map.panTo(place.geometry.location);
+        map.setZoom(15);
+        // search();
+      } else {
+        // document.getElementById('autocomplete').placeholder = 'Not Found, Try Again';
+      }
   }
   //Gets users current position
   var getPosition = function () {
@@ -101,25 +114,27 @@ angular.module('nomNow.services', [])
     // temp vars to find closest restaurant
     var mylat = null;
     var mylong = null;
-    var choices =[{dis:null, name:null, google_id:null, loc:null},
-                    {dis:null, name:null, google_id:null, loc:null},
-                    {dis:null, name:null, google_id:null, loc:null}]
+    // var choices =[{dis:null, name:null, google_id:null, loc:null},
+    //                 {dis:null, name:null, google_id:null, loc:null},
+    //                 {dis:null, name:null, google_id:null, loc:null}]
+    var choices = []
     getPosition().then(function(value){
       mylat = value.coords.latitude
       mylong = value.coords.longitude
       var myloc = new google.maps.LatLng(mylat, mylong)
       var request = {
           location: myloc,
-          radius: 500,
-          types: ['restaurant']
+          // radius: 500,
+          rankBy: google.maps.places.RankBy.DISTANCE,
+          types: ['restaurant','meal_takeaway']
         };
-      if(byname){
-        var request = {
-            location: myloc,
-            radius: 100,
-            name:byname
-          };
-        }
+      // if(byname){
+      //   var request = {
+      //       location: myloc,
+      //       radius: 100,
+      //       name:byname
+      //     };
+      //   }
       // api request that gets closest places.
       var service = new google.maps.places.PlacesService(map);
 
@@ -133,16 +148,19 @@ angular.module('nomNow.services', [])
             getDistanceFromLatLonInKm(mylat, mylong, coords["k"], coords["D"],obj,
             //after calculating distance in helper below this function compares the lowest distance.
               function(dis, obj){
-                if(choices[0]['dis']===null||choices[0]['dis']>dis){
-                  choices[2]= choices[1];
-                  choices[1]= choices[0];
-                  choices[0]= obj
-                  choices[0]['dis']= dis;
-                }
+                choices.push(obj);
+                console.log(choices)
+                // if(choices[0]['dis']===null||choices[0]['dis']>dis){
+                //   choices[2]= choices[1];
+                //   choices[1]= choices[0];
+                //   choices[0]= obj
+                //   choices[0]['dis']= dis;
+                // }
             })
           }
           //set time out lets us wait till data is processed
           setTimeout(function(){
+            choices.length = 3
             var closest = choices
             cb(closest);
           }, 1000)
@@ -201,6 +219,9 @@ angular.module('nomNow.services', [])
     getRestaurantLocation: getRestaurantLocation,
     getClosestRestaurant:getClosestRestaurant,
     displayInfo: displayInfo,
-    getweb:getweb
+    getweb:getweb,
+    centerMap: centerMap,
+    map: map
+
   }
 })
