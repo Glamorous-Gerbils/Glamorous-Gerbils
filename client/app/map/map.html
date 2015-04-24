@@ -1,10 +1,14 @@
-<nav class="navbar navbar-default navbar-inverse navbar-fixed-top">
+<nav class="navbar navbar-default navbar-inverse navbar-static-top">
   <div class="container">
     <div class="navbar-header col-xs-12 col-sm-12 col-md-6 col-lg-6">
       <a class="navbar-brand" href="#/map">NomNow</a>
     </div>
     <div id="navbar" class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+      <form class="navbar-form navbar-left" role="search">
+      <div class="form-group">
+      <input class="form-control" ng-model="selectedPlace" location="selectedPlaceLocation" details="selectedPlaceDetails" type="text" placeholder="Search Box" googleplace="" /></div></form>
       <ul class="nav navbar-nav navbar-right">
+      <!-- <p class="latlon">{{ selectedPlaceDetails.geometry.location }}</p>-->
       <li ng-controller="modalctrl">
         <button type = "button" class="btn btn-lg btn-primary navbar-btn navbar-nav navbar-right" ng-click="reportpage()">Report Wait Time</button>
       <!--  Below is the script for the popup window. activated by the button above-->
@@ -37,6 +41,7 @@
     </div><!--/.nav-collapse -->
   </div><!--/.container-fluid -->
 </nav>
+
 <div class="container-fluid" id="map-container">
   <div id="map-canvas"></div>
 </div>

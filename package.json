@@ -10,10 +10,15 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "Faker": "^0.7.2",
     "body-parser": "^1.12.2",
     "bower": "^1.4.1",
     "express": "^4.12.3",
+    "faker": "^2.1.2",
     "favicon": "0.0.2",
-    "mysql": "^2.5.4"
+    "fs": "0.0.2",
+    "mysql": "^2.5.4",
+    "request": "^2.55.0",
+    "tropo-webapi": "^1.2.0"
   }
 }
