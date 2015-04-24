@@ -197,4 +197,25 @@ exports.getLatestReportTimestampById = function(g_id,cb){
   });
 };
 
+exports.addCalledReport = function(phoneNumber,time) {
+  var getID = 'SELECT google_id FROM restaurants WHERE phone=?';
+  var params = phoneNumber;
+  pool.getConnection(function(err, connection){
+    connection.on('error', function(err) {
+      console.log(err.code);
+    });
+    if(!err){
+      connection.query(getID,params,function(err,results) {
+        if(!err){
+          //do something with results
+          console.log(results)
+          var ID = results[0].google_id;
+          exports.addReport(ID,time);
+        }
+      });
+      connection.release();
+    }
+  });
+};
+
 exports.init();
